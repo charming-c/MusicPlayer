@@ -1,18 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/EndTime"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3:00"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:id="@+id/NowTime"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"/>
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/line"
+            android:layout_marginHorizontal="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/Last"
+            android:layout_weight="1"
+            android:text="Last"
+            android:layout_width="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/Stop"
+            android:text="stop"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/Next"
+            android:text="next"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="match_parent"/>
+<!--        <Button-->
+<!--            android:text="list"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:layout_height="match_parent"/>-->
+    </LinearLayout>
+
+
+</LinearLayout>
