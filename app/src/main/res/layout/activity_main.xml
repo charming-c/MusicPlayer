@@ -20,6 +20,7 @@
 
         <TextView
             android:id="@+id/EndTime"
+            android:layout_marginRight="5dp"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
@@ -29,6 +30,7 @@
 
         <TextView
             android:id="@+id/NowTime"
+            android:layout_marginLeft="5dp"
             android:layout_centerInParent="true"
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
@@ -52,31 +54,32 @@
 
         <Button
             android:id="@+id/Last"
-            android:layout_weight="1"
-            android:text="Last"
-            android:layout_width="0dp"
+            android:background="@drawable/ic_baseline_fast_rewind_24"
+            android:layout_width="50dp"
             android:layout_marginBottom="20dp"
-            android:layout_height="match_parent"/>
+            android:layout_marginLeft="30dp"
+            android:layout_height="50dp"/>
         <Button
+            android:background="@drawable/stop_button"
             android:id="@+id/Stop"
-            android:text="stop"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:layout_width="50dp"
             android:layout_marginBottom="20dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="50dp"/>
         <Button
             android:id="@+id/Next"
-            android:text="next"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/ic_baseline_fast_forward_24"
+            android:layout_width="50dp"
             android:layout_marginBottom="20dp"
-            android:layout_height="match_parent"/>
-<!--        <Button-->
-<!--            android:text="list"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_marginBottom="20dp"-->
-<!--            android:layout_height="match_parent"/>-->
+            android:layout_height="50dp"/>
+        <Button
+            android:layout_width="50dp"
+            android:layout_marginBottom="20dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_baseline_menu_open_24"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp" />
     </LinearLayout>
 
 
