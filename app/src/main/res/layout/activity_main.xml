@@ -5,12 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/screen_bkg"
     tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/Music_name"
+            android:text="someone like you"
+            android:textSize="20dp"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="20dp"
+            android:layout_height="30dp"/>
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="0dp"
+            android:textSize="15dp"
+            android:textColor="#CFCDCD"
+            android:layout_below="@+id/Music_name"
+            android:text="Adele"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_weight="5"
         />
 
     <RelativeLayout
