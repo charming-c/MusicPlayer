@@ -5,15 +5,25 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.musicplayer.Bean.MusicBean;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<MusicBean> musicList = new ArrayList<>();
+    private MusicBean musicBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setData(uri);
                 startActivity(intent);
                 initView();
+                getMusic();
                 Log.d("perssion","1");
             }else {
                 //不需要解释为何需要授权直接请求授权
@@ -38,8 +49,40 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             initView();
+            getMusic();
         }
     }
+
+//    这个方法利用ContentProvider扫描内存，获得歌曲信息
+    private void getMusic() {
+//        开启新线程扫描
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                Cursor cursor = getApplicationContext().getContentResolver().query(musicUri,
+                        null,null,null,null);
+                if(cursor == null) {
+//                    Log.d("1","2");
+                    return;
+                }
+//                cursor.moveToFirst();
+                while (cursor.moveToNext()){
+                    musicBean = new MusicBean();
+                    musicBean.setTitle(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                    musicBean.setAlbumBip(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                    musicBean.setArtist(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                    musicBean.setLength(cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                    musicBean.setPath(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)));
+                    musicList.add(musicBean);
+//                    Log.d("1"+"music",cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                }
+                cursor.close();
+            }
+        }).start();
+
+    }
+
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 1: {
@@ -57,7 +100,5 @@ public class MainActivity extends AppCompatActivity {
 
 //    这个方法用于更新视图
     private void initView() {
-
-//        第一步：扫描内存，获得所有歌曲的列表
     }
 }
