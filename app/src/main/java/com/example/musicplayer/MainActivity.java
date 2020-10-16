@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<MusicBean> musicList = new ArrayList<>();
+    public static ArrayList<MusicBean> musicList = new ArrayList<>();
     private MusicBean musicBean;
     private TextView endTime;
     private TextView nowTime;
@@ -66,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            musicService = ((MusicService.MyBinder)iBinder).getService();
+//            musicService = ((MusicService.MyBinder)iBinder).getService();
+            myBinder = (MusicService.MyBinder)iBinder;
+//            musicService = myBinder.getService();
+            Log.d("musicService","1"+musicService);
         }
 
         @Override
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("service ","fail");
         }
     };
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +135,13 @@ public class MainActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(SCAN_OK);
                 cursor.close();
                 bindServiceConnection();
+                if(myBinder!=null){
+                    position=myBinder.getPosition();
+//                    Log.d("1","position"+position);
+                    musicTitle.setText(musicList.get(position).getTitle());
+                    musicAuthor.setText(musicList.get(position).getArtist());
+//                    endTime.setText(String.valueOf(musicList.get(position).getLength()));
+                }
                 Log.d("path",""+musicList.get(1).getPath());
             }
         }).start();
@@ -154,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
 //    这个方法用于更新视图
     private void initView() {
-//        getMusic();
+        getMusic();
         endTime=findViewById(R.id.EndTime);
         nowTime=findViewById(R.id.NowTime);
         seekBar=findViewById(R.id.line);
@@ -165,20 +176,30 @@ public class MainActivity extends AppCompatActivity {
         next=findViewById(R.id.Next);
         last=findViewById(R.id.Last);
 
+
 //        播放、暂停的监听器
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
                 if(play.isSelected() == true){
+                    Log.d("selected","1"+play.isSelected());
                     play.setSelected(false);
-                    if(musicService != null)
-                        musicService.PlayOrPause();
-                    Log.d("0","10");
+                    if(myBinder != null)
+                    {
+                        myBinder.PlayOrPause();
+                        Log.d("0","10");
+                    }
                 }
                 else{
                     play.setSelected(true);
-                    if(musicService != null)
-                        musicService.PlayOrPause();
+                    Log.d("selected","1"+play.isSelected());
+                    if(myBinder != null){
+                        play.setSelected(false);
+                        myBinder.PlayOrPause();
+                    }
                 }
             }
         });
@@ -187,7 +208,20 @@ public class MainActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(myBinder != null){
+                    try {
+                        myBinder.playNext();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(myBinder!=null){
+                    position=myBinder.getPosition();
+//                    Log.d("1","position"+position);
+                    musicTitle.setText(musicList.get(position).getTitle());
+                    musicAuthor.setText(musicList.get(position).getArtist());
+//                    endTime.setText(String.valueOf(musicList.get(position).getLength()));
+                }
             }
         });
 
@@ -195,29 +229,42 @@ public class MainActivity extends AppCompatActivity {
         last.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(myBinder != null){
+                    try {
+                        myBinder.playPrev();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(myBinder!=null){
+                    position=myBinder.getPosition();
+//                    Log.d("1","position"+position);
+                    musicTitle.setText(musicList.get(position).getTitle());
+                    musicAuthor.setText(musicList.get(position).getArtist());
+//                    endTime.setText(String.valueOf(musicList.get(position).getLength()));
+                }
             }
         });
-        if(musicList.size()==0){
-            getMusic();
-            Log.d("1","2"+musicList.size());
-        }
-        else
-                    Log.d("music","path"+musicList.get(0).getPath());
+//        if(musicList.size()==0){
+//            getMusic();
+//            Log.d("1","2"+musicList.size());
+//        }
+//        else
+//                    Log.d("music","path"+musicList.get(0).getPath());
 
     }
 
     private void bindServiceConnection(){
         Intent intent = new Intent(MainActivity.this,MusicService.class);
         startService(intent);
-        bindService(intent,serviceConnection,this.BIND_AUTO_CREATE);
+        bindService(intent,serviceConnection,BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Intent  mBindIntent = new Intent(MainActivity.this, MusicService.class);
-        MainActivity.this.stopService(mBindIntent);
+        stopService(mBindIntent);
 //        if(mplayer.isPlaying()){
 //            mplayer.stop();
 //        }

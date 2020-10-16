@@ -12,49 +12,50 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.example.musicplayer.Bean.MusicBean;
+import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
 public class MusicService extends Service {
     private NotificationManager notifyManager;
+
+    private int position = 1;
     private MediaPlayer mplayer;
-    private String[] musicBean;
+    private MusicBean musicBean;
     public MyBinder binder = new MyBinder();
+    private ArrayList<MusicBean> musicList;
 
     public MusicService() {
         mplayer=new MediaPlayer();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return new MyBinder();
+    }
+
+        // Service 创建方法
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.musicList= MainActivity.musicList;
+        Log.i(TAG, "----onCreate----");
         try {
 //            Log.d("music","path"+musicList.get(0).getPath());
             Log.d("1","2");
-            mplayer.setDataSource("/storage/emulated/0/qqmusic/song/陈韵若陈每文 - 爱的回归线 [mqms2].mp3");
+            mplayer.setDataSource(musicList.get(position).getPath());
             mplayer.prepare();
 
         } catch (IOException e) {
             e.printStackTrace();
 //            Log.d("music","path"+String.valueOf(musicBean));
         }
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    public void PlayOrPause(){
-        if(mplayer.isPlaying()){
-            mplayer.pause();
-        }
-        else mplayer.start();
-    }
-        // Service 创建方法
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.i(TAG, "----onCreate----");
     }
 
 
@@ -84,9 +85,38 @@ public class MusicService extends Service {
         super.onDestroy();
     }
 
-    public class MyBinder {
+    public class MyBinder extends Binder {
+        public int getPosition() {
+            return position;
+        }
+
         public MusicService getService(){
             return MusicService.this;
+        }
+        public void PlayOrPause(){
+            if(mplayer.isPlaying()){
+                mplayer.pause();
+            }
+            else mplayer.start();
+        }
+        public void playNext() throws IOException {
+            mplayer.pause();
+            mplayer=new MediaPlayer();
+            position++;
+            mplayer.setDataSource(musicList.get(position).getPath());
+            Log.d("music","posotion "+position+musicList.get(position).getTitle());
+            mplayer.prepare();
+            mplayer.start();
+        }
+        public void playPrev() throws IOException {
+            if(position == 1) return;
+            mplayer.pause();
+            mplayer=new MediaPlayer();
+            position--;
+            mplayer.setDataSource(musicList.get(position).getPath());
+            Log.d("music","posotion "+position+musicList.get(position).getTitle());
+            mplayer.prepare();
+            mplayer.start();
         }
     }
 }
