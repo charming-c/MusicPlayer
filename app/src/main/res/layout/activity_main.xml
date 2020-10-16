@@ -23,6 +23,7 @@
             android:layout_marginLeft="20dp"
             android:layout_height="30dp"/>
         <TextView
+            android:id="@+id/Author"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="0dp"
             android:textSize="15dp"
