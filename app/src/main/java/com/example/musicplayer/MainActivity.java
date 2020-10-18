@@ -135,14 +135,12 @@ public class MainActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(SCAN_OK);
                 cursor.close();
                 bindServiceConnection();
-                if(myBinder!=null){
-                    position=myBinder.getPosition();
-//                    Log.d("1","position"+position);
-                    musicTitle.setText(musicList.get(position).getTitle());
-                    musicAuthor.setText(musicList.get(position).getArtist());
-//                    endTime.setText(String.valueOf(musicList.get(position).getLength()));
-                }
-                Log.d("path",""+musicList.get(1).getPath());
+//                position=1;
+////                    Log.d("1","position"+position);
+                musicTitle.setText(musicList.get(1).getTitle());
+                musicAuthor.setText(musicList.get(1).getArtist());
+//                endTime.setText(String.valueOf(musicList.get(1).getLength()));
+////                Log.d("path",""+musicList.get(1).getPath());
             }
         }).start();
 
@@ -165,24 +163,22 @@ public class MainActivity extends AppCompatActivity {
 
 //    这个方法用于更新视图
     private void initView() {
-        getMusic();
         endTime=findViewById(R.id.EndTime);
         nowTime=findViewById(R.id.NowTime);
         seekBar=findViewById(R.id.line);
         musicTitle=findViewById(R.id.Music_name);
         musicAuthor=findViewById(R.id.Author);
-        
+
         play=findViewById(R.id.Stop);
         next=findViewById(R.id.Next);
         last=findViewById(R.id.Last);
 
+        getMusic();
 
 //        播放、暂停的监听器
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
 
                 if(play.isSelected() == true){
                     Log.d("selected","1"+play.isSelected());
@@ -194,10 +190,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    play.setSelected(true);
+//                    play.setSelected(true);
                     Log.d("selected","1"+play.isSelected());
                     if(myBinder != null){
-                        play.setSelected(false);
+                        play.setSelected(true);
                         myBinder.PlayOrPause();
                     }
                 }
@@ -211,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 if(myBinder != null){
                     try {
                         myBinder.playNext();
+                        play.setSelected(true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -231,7 +228,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(myBinder != null){
                     try {
+                        play.setSelected(true);
                         myBinder.playPrev();
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

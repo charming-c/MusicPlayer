@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -83,6 +84,10 @@ public class MusicService extends Service {
         Log.i(TAG, "----onDestroy----");
         notifyManager.cancelAll();
         super.onDestroy();
+        if(mplayer.isPlaying()){
+            mplayer.stop();
+        }
+        mplayer.release();
     }
 
     public class MyBinder extends Binder {
@@ -109,7 +114,10 @@ public class MusicService extends Service {
             mplayer.start();
         }
         public void playPrev() throws IOException {
-            if(position == 1) return;
+            if(position == 1) {
+                Toast.makeText(getApplicationContext(),"这是第一首歌了！",Toast.LENGTH_SHORT).show();
+                return;
+            }
             mplayer.pause();
             mplayer=new MediaPlayer();
             position--;
